@@ -1,15 +1,15 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
+using static Unity.Mathematics.math;
 public class Mov : MonoBehaviour
    {
    public float ms;
     public float cms;
     public float JumpHeight;
-
+    public Animator anim;
     public Transform FloorCheck;
-    
+    float mvmt;
 
     public LayerMask grounded;
     public float CheckRadius;
@@ -46,6 +46,7 @@ public class Mov : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        
         if(isDashing)
         {
             return;
@@ -64,7 +65,8 @@ public class Mov : MonoBehaviour
         {
             StartCoroutine(Dashe());
         }
-       
+        
+        
     }
     private void FixedUpdate()
     {
@@ -78,6 +80,11 @@ public class Mov : MonoBehaviour
     private void Speed()
     {
         rb.velocity = new Vector2(moveDirection * ms, rb.velocity.y);
+        if(!isGrounded)
+        {
+            rb.velocity = new Vector2(moveDirection * 0.5f * ms, rb.velocity.y);
+        }
+        
     }
 
     private void Animate()
@@ -91,6 +98,7 @@ public class Mov : MonoBehaviour
     private void Inputs()
     {
         moveDirection = Input.GetAxis("Horizontal");
+        anim.SetFloat("Sped",Mathf.Abs(moveDirection));
         if(Input.GetButtonDown("Jump") && isGrounded|| Input.GetKeyDown(KeyCode.W) && isGrounded)
         {
             isJumping = true;
