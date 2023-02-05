@@ -12,7 +12,6 @@ public class BossProjectile : StateMachineBehaviour
     public GameObject balls;
     Rigidbody2D rb;
     Rigidbody2D ballsbody;
-    
     int i;
     int flag;
     float timerino;

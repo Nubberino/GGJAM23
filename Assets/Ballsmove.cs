@@ -9,6 +9,7 @@ public class Ballsmove : MonoBehaviour
     public Transform PPos;
     public GameObject blals;
     public GameObject Boss;
+    public int y;
     void Start()
     {
         Invoke("DestroyProjectile", 2f);

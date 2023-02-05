@@ -20,7 +20,7 @@ public class SpikeMove : MonoBehaviour
     int x;
     void Start()
     {
-    Targetscale = new Vector3(1,8,1);
+    Targetscale = new Vector3(1,3,1);
     Currentscale = Vector3.one;
     t = 0;
      PPos = GameObject.FindGameObjectWithTag("Pyer").transform;
@@ -30,14 +30,13 @@ public class SpikeMove : MonoBehaviour
      Tiles = GameObject.FindGameObjectWithTag("Tiles");
      Physics2D.IgnoreCollision(Boss.GetComponent<Collider2D>(), GetComponent<Collider2D>());
     Physics2D.IgnoreCollision(Tiles.GetComponent<Collider2D>(), GetComponent<Collider2D>());
-     x = 3;
-    StretchDurat = 1.33f;
+     x = 5;
+    StretchDurat = 0.11f;
         flag = 0;
     }
     // Update is called once per frame
     void Update()
     {
-     
      Target = new Vector3(PPos.position.x, -2.66f, -0.1f);
         Vector2 newPos = Vector2.MoveTowards(rb.position, Target, x * Time.fixedDeltaTime);
         rb.MovePosition(newPos);
@@ -45,7 +44,7 @@ public class SpikeMove : MonoBehaviour
         if(Vector2.Distance(Target, rb.position) <= 0.2f)
        {
         //Stop move then stretch upwards
-        Invoke("Stretchy", 1f);
+        Invoke("Stretchy", 0.45f);
         
         x = 0;
         
@@ -74,7 +73,13 @@ public class SpikeMove : MonoBehaviour
     {
         extend = true;
         flag = 1;
-        Debug.Log(flag);
         
+        Invoke("Ded",3);
+        
+    }
+    void Ded()
+    {
+        Destroy(gameObject);
+        flag = 2;
     }
 }

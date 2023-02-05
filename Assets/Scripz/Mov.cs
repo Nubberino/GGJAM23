@@ -22,6 +22,7 @@ public class Mov : MonoBehaviour
     public float Dpower = 20f;
     public float Dtime = 0.3f;
     public float Dcooldown = 1f;  
+    float dcool;
 
 
     public Rigidbody2D rb;
@@ -41,12 +42,28 @@ public class Mov : MonoBehaviour
     {
         CanMove = true;
         cms = ms;
+        dcool = 1f;
+        Dcooldown = dcool;
     }
 
     // Update is called once per frame
     void Update()
     {
-        
+        anim.SetBool("Jumping",false);
+        if (!isGrounded)
+        {
+            anim.SetBool("Jumping",true);
+            anim.SetBool("Walk", false);
+        }
+        else
+        {
+            anim.SetBool("Walk",true);
+        }
+        Dcooldown -= Time.deltaTime;
+        if (Dcooldown <= 0)
+        {
+            Dash = true;
+        }
         if(isDashing)
         {
             return;
@@ -63,6 +80,7 @@ public class Mov : MonoBehaviour
         Animate();
         if (Input.GetKeyDown(KeyCode.LeftShift) && Dash)
         {
+            Dcooldown = dcool;
             StartCoroutine(Dashe());
         }
         
@@ -102,6 +120,7 @@ public class Mov : MonoBehaviour
         if(Input.GetButtonDown("Jump") && isGrounded|| Input.GetKeyDown(KeyCode.W) && isGrounded)
         {
             isJumping = true;
+            anim.SetBool("Jumping",true);
             Jumpe();
         }
         
@@ -110,7 +129,6 @@ public class Mov : MonoBehaviour
 
     private void Jumpe()
     {
-        Debug.Log("Hello");
         rb.AddForce(Vector2.up * JumpHeight, ForceMode2D.Impulse);
     }
 
@@ -130,8 +148,10 @@ public class Mov : MonoBehaviour
 
     private IEnumerator Dashe()
     {
+        
         Dash = false;
         isDashing = true;
+
         float OGrav = rb.gravityScale;
         rb.gravityScale = 0.1f * rb.gravityScale;
         if(facingRight)
@@ -151,7 +171,7 @@ public class Mov : MonoBehaviour
 
         rb.gravityScale = OGrav;
         isDashing = false;
-        Dash = true;
+        
 
     }
 

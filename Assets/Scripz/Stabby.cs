@@ -9,10 +9,11 @@ public class Stabby : MonoBehaviour
     public Mov movs;
     public float stabCD;
     public GameObject stab;
+    public Animator anim;
     void Start()
     {
         chargecurr = chargetime;
-        stab.GetComponent<SpriteRenderer>().enabled = false;
+        stab.GetComponent<BoxCollider2D>().enabled = false;
 
     }
 
@@ -24,26 +25,41 @@ public class Stabby : MonoBehaviour
         {
             if(Input.GetKey(KeyCode.Mouse1))
             {
-                stab.GetComponent<SpriteRenderer>().enabled = true;
+                anim.SetBool("Charging",true);
                 chargecurr -= Time.deltaTime;
+                movs.CanMove = false;
+                stab.GetComponent<BoxCollider2D>().enabled = true;
+                
                 if(Input.GetKeyDown(KeyCode.Mouse0) && chargecurr <= 0)
                 {
                     England();
-                    Debug.Log("Hi");
                 }
+            
                 
             }
             if(Input.GetKeyUp(KeyCode.Mouse1))
             {
             chargecurr = chargetime;
+            anim.SetBool("Charging", false);
+            movs.CanMove = true;
             }
+            
         }
     }
 
     public void England()
     {
-        stabCD = 6;
+        stabCD = 2;
         chargecurr = chargetime;
-        stab.GetComponent<SpriteRenderer>().enabled = false;
+        stab.GetComponent<BoxCollider2D>().enabled = false;
+        anim.SetBool("SwingWep",true);
+        Invoke("Unfreeze", 0.11f);
+    }
+
+    void Unfreeze()
+    {
+        movs.CanMove = true;
+        anim.SetBool("SwingWep",false);
+        anim.SetBool("Charging",false);
     }
 }
